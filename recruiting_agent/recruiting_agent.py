@@ -35,6 +35,11 @@ from . import data_service
 from .data_service import RECRUITER_IDS
 
 MODEL_NAME = "gpt-4o-mini"
+LLM_METADATA = {
+    "ls_provider": "openai",
+    "ls_model_name": MODEL_NAME,
+    "ls_message_format": "openai",
+}
 
 # ---------------------------------------------------------------------------
 # Job posting schema
@@ -118,7 +123,9 @@ class CandidateScore(BaseModel):
     rubric_breakdown: RubricBreakdown
 
 
-_scoring_llm = ChatOpenAI(model=MODEL_NAME, temperature=0).with_structured_output(CandidateScore)
+_scoring_llm = ChatOpenAI(model=MODEL_NAME, temperature=0).with_config(
+    metadata=LLM_METADATA
+).with_structured_output(CandidateScore)
 
 
 def _job_has_required_fields(job):
@@ -220,7 +227,9 @@ SYSTEM_PROMPT = (
     "false, send the requested email as normal."
 )
 
-agent_model = ChatOpenAI(model=MODEL_NAME, temperature=0)
+agent_model = ChatOpenAI(model=MODEL_NAME, temperature=0).with_config(
+    metadata=LLM_METADATA
+)
 
 recruiting_agent = create_deep_agent(
     model=agent_model,
