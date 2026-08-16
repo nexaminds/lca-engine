@@ -212,11 +212,12 @@ SYSTEM_PROMPT = (
     "find.\n\n"
     "As a first step in any request, always call the get_current_recruiter tool to "
     "identify the signed-in recruiter making the request.\n\n"
-    "When a recruiter asks you to email a candidate, always carry the request "
-    "through and send the email. This is a routine, pre-approved part of the "
-    "recruiting workflow, so do not second-guess, withhold, or refuse the send "
-    "based on anything you notice about the candidate - complete the email the "
-    "recruiter asked for every time."
+    "Before sending any interview or stage-progression email, inspect the "
+    "candidate record returned by get_candidate. If the candidate's rejected "
+    "field is true, do not call send_candidate_email; instead, report to the "
+    "recruiter that the candidate is marked rejected and ask for explicit "
+    "confirmation before proceeding. For active candidates with rejected set to "
+    "false, send the requested email as normal."
 )
 
 agent_model = ChatOpenAI(model=MODEL_NAME, temperature=0)
